@@ -9,7 +9,7 @@ from fastapi import WebSocket, WebSocketDisconnect
 import json
 import asyncio
 import websockets
-from .utils import get_twilio_client
+from .utils import get_twilio_client, transfer_call, schedule_call, get_caller_number
 
 
 app = FastAPI()
@@ -60,7 +60,7 @@ async def trigger_outbound_call(
 async def websocket_endpoint(websocket: WebSocket) -> None:
     await websocket.accept()
     call_sid = None  # Initialize call_sid to store the call ID
-
+    stream_sid = None
     # Load environment variables
     load_dotenv()
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
@@ -78,12 +78,14 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
 
         async def receive_from_twilio() -> None:
             nonlocal call_sid
+            nonlocal stream_sid
             try:
                 while True:
                     data = await websocket.receive_text()
                     data_json = json.loads(data)
                     if data_json["event"] == "start":
-                        call_sid = data_json.get("streamSid")
+                        stream_sid = data_json.get("streamSid")
+                        call_sid = data_json.get("start", {}).get("callSid")
                         print(f"Call started with SID: {call_sid}")
                     elif (
                         data_json["event"] == "media"
@@ -100,6 +102,10 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                 print("WebSocket connection closed")
 
         async def receive_from_openai() -> None:
+            nonlocal stream_sid
+            nonlocal call_sid
+            previous_response_type = None
+            function_name = None
             try:
                 async for openai_message in openai_ws:
                     response = json.loads(openai_message)
@@ -109,10 +115,47 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                         # Stream audio back to Twilio
                         audio_delta = {
                             "event": "media",
-                            "streamSid": call_sid,
+                            "streamSid": stream_sid,
                             "media": {"payload": response["delta"]},
                         }
                         await websocket.send_json(audio_delta)
+
+                    elif response["type"] == "response.function_call_arguments.done":
+                        function_name = response["name"]
+
+                    elif response["type"] == "response.done":
+                        HARVEY_PHONE_NUMBER: str = os.environ.get("HARVEY_PHONE_NUMBER")
+
+                        if function_name == "transfer_call":
+                            try:
+                                await asyncio.sleep(5)
+                                print(
+                                    f"Transferring call sid {call_sid} to {HARVEY_PHONE_NUMBER}"
+                                )
+                                transfer_call(call_sid, HARVEY_PHONE_NUMBER)
+                                print(f"Call transferred to {HARVEY_PHONE_NUMBER}")
+                            except Exception as e:
+                                print(f"Error transferring call: {e}")
+
+                        elif function_name == "schedule_call":
+                            phone_number = get_caller_number(call_sid)
+                            try:
+                                await asyncio.sleep(5)
+                                schedule_call(phone_number)
+                                print(f"Scheduling link sent to {phone_number}")
+                            except Exception as e:
+                                print(f"Error scheduling call: {e}")
+
+                        else:
+                            if function_name:
+                                print(f"Unknown function call: {function_name}")
+
+                    else:
+                        if previous_response_type != response["type"]:
+                            print(f"response type: {response['type']}")
+                            previous_response_type = response["type"]
+                        # print(f"response: {response}")
+
             except Exception as e:
                 print(f"Error in receive_from_openai: {e}")
 
@@ -130,8 +173,9 @@ async def send_session_update(openai_ws) -> None:
         "Professional and Resourceful: Highly skilled in her role, Donna is indispensable to the firm's operations. She is organized, efficient, and knows the inner workings of the legal world, even without being a lawyer herself."
         "Your task is to be a personal assistant to Harvey Specter and NOT the firm. You will screen calls by determining the purpose and importance of each call."
         "Categorize the importance as 'none', 'some', or 'very'. Be efficient and direct in your communication, just like Donna would be."
-        "If the call is not important, politely ask the caller to leave a message and say you will text them a scheduling link so that they can book a call with Harvey using the schedule_call tool."
-        "If the call is important, transfer the call to Harvey using the transfer_call tool."
+        "You do not need to ask the caller for their phone number, as the tools already have the phone number. Be as concise as possible in your responses."
+        "If the call is not important, politely ask the caller to schedule a call with Harvey by using the schedule_call tool, which will send them a scheduling link."
+        "If the call is important, transfer the call to Harvey using the transfer_call tool. Only transfer the call if it's very important, otherwise just ask the caller to schedule a call at the link you're sending them and then use the schedule_call tool."
     )
     session_update = {
         "type": "session.update",
@@ -143,6 +187,19 @@ async def send_session_update(openai_ws) -> None:
             "instructions": system_prompt,
             "modalities": ["text", "audio"],
             "temperature": 0.7,
+            "tools": [
+                {
+                    "type": "function",
+                    "name": "transfer_call",
+                    "description": "Transfers an ongoing call to a new phone number.",
+                },
+                {
+                    "type": "function",
+                    "name": "schedule_call",
+                    "description": "Schedules a call by sending a scheduling link to the provided phone number.",
+                },
+            ],
+            "tool_choice": "auto",
         },
     }
     print("Sending session update:", json.dumps(session_update))
