@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 fastapi = {extras = ["standard"], version = "^0.115.2"}
 twilio = "^9.3.3"
+websocket-client = "^1.8.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.9"

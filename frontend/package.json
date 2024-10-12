@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit --pretty --project tsconfig.json && echo '✔ TypeScript compilation passed'"
   },
   "dependencies": {
+    "@openai/realtime-api-beta": "github:openai/openai-realtime-api-beta",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.1.0",
