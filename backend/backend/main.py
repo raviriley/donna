@@ -9,8 +9,8 @@ import os
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
+@app.get("/hello")
+def hello() -> dict[str, str]:
     return {"Hello": "World"}
 
 
@@ -35,7 +35,7 @@ def get_twilio_client() -> TwilioClient:
 async def trigger_outbound_call(
     request: CallRequest,
     twilio_client: TwilioClient = Depends(get_twilio_client),
-):
+) -> JSONResponse:
     phone_number = request.phone_number
     call_context = request.call_context
     agent_id = request.agent_id
@@ -70,3 +70,5 @@ async def trigger_outbound_call(
                 "twilio_call_sid": call.sid,
             },
         )
+    else:
+        return JSONResponse(status_code=400, content={"message": "Invalid request"})
