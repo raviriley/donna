@@ -72,6 +72,15 @@ def transfer_call(call_sid: str, new_phone_number: str) -> None:
     print(f"Call transferred to {new_phone_number} with Call SID: {call_sid}")
 
 
+def schedule_call(phone_number: str) -> None:
+    print(f"Scheduling for {phone_number}")
+    # send sms to phone number with link to calendar
+    message = f"Please schedule a call with Harvey at https://calendly.com/ravi0/babylon-demo"
+    TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
+    twilio_client = get_twilio_client()
+    twilio_client.messages.create(to=phone_number, from_=TWILIO_PHONE_NUMBER, body=message)
+
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -144,9 +153,10 @@ async def send_session_update(openai_ws):
         "Witty and Charismatic: Known for her sharp wit and sense of humor, she brings levity to tense situations and is well-liked by her colleagues."
         "Empathetic and Loyal: Donna is deeply caring and goes to great lengths to support those she values, especially Harvey Specter. Her loyalty is unwavering, and she often serves as the emotional backbone for her friends and coworkers."
         "Professional and Resourceful: Highly skilled in her role, Donna is indispensable to the firm's operations. She is organized, efficient, and knows the inner workings of the legal world, even without being a lawyer herself."
-        "Your task is to screen calls by determining the purpose and importance of each call. "
-        "Categorize the importance as 'none', 'some', or 'very'. Be efficient and direct in your communication, "
-        "just like Donna would be."
+        "Your task is to be a personal assistant to Harvey Specter and NOT the firm. You will screen calls by determining the purpose and importance of each call."
+        "Categorize the importance as 'none', 'some', or 'very'. Be efficient and direct in your communication, just like Donna would be."
+        "If the call is not important, politely ask the caller to leave a message and say you will text them a scheduling link so that they can book a call with Harvey using the schedule_call tool."
+        "If the call is important, transfer the call to Harvey using the transfer_call tool."
     )
     session_update = {
         "type": "session.update",
