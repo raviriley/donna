@@ -215,6 +215,38 @@ tests = ["cloudpickle", "hypothesis", "mypy (>=1.11.1)", "pympler", "pytest (>=4
 tests-mypy = ["mypy (>=1.11.1)", "pytest-mypy-plugins"]
 
 [[package]]
+name = "beautifulsoup4"
+version = "4.12.3"
+description = "Screen-scraping library"
+optional = false
+python-versions = ">=3.6.0"
+files = [
+    {file = "beautifulsoup4-4.12.3-py3-none-any.whl", hash = "sha256:b80878c9f40111313e55da8ba20bdba06d8fa3969fc68304167741bbf9e082ed"},
+    {file = "beautifulsoup4-4.12.3.tar.gz", hash = "sha256:74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051"},
+]
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+cchardet = ["cchardet"]
+chardet = ["chardet"]
+charset-normalizer = ["charset-normalizer"]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
+name = "cachetools"
+version = "5.5.0"
+description = "Extensible memoizing collections and decorators"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "cachetools-5.5.0-py3-none-any.whl", hash = "sha256:02134e8439cdc2ffb62023ce1debca2944c3f289d66bb17ead3ab3dede74b292"},
+    {file = "cachetools-5.5.0.tar.gz", hash = "sha256:2cc24fb4cbe39633fb7badd9db9ca6295d766d9c2995f245725a46715d050f2a"},
+]
+
+[[package]]
 name = "certifi"
 version = "2024.8.30"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -544,6 +576,135 @@ files = [
 ]
 
 [[package]]
+name = "google"
+version = "3.0.0"
+description = "Python bindings to the Google search engine."
+optional = false
+python-versions = "*"
+files = [
+    {file = "google-3.0.0-py2.py3-none-any.whl", hash = "sha256:889cf695f84e4ae2c55fbc0cfdaf4c1e729417fa52ab1db0485202ba173e4935"},
+    {file = "google-3.0.0.tar.gz", hash = "sha256:143530122ee5130509ad5e989f0512f7cb218b2d4eddbafbad40fd10e8d8ccbe"},
+]
+
+[package.dependencies]
+beautifulsoup4 = "*"
+
+[[package]]
+name = "google-api-core"
+version = "2.21.0"
+description = "Google API client core library"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "google_api_core-2.21.0-py3-none-any.whl", hash = "sha256:6869eacb2a37720380ba5898312af79a4d30b8bca1548fb4093e0697dc4bdf5d"},
+    {file = "google_api_core-2.21.0.tar.gz", hash = "sha256:4a152fd11a9f774ea606388d423b68aa7e6d6a0ffe4c8266f74979613ec09f81"},
+]
+
+[package.dependencies]
+google-auth = ">=2.14.1,<3.0.dev0"
+googleapis-common-protos = ">=1.56.2,<2.0.dev0"
+proto-plus = ">=1.22.3,<2.0.0dev"
+protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<6.0.0.dev0"
+requests = ">=2.18.0,<3.0.0.dev0"
+
+[package.extras]
+async-rest = ["google-auth[aiohttp] (>=2.35.0,<3.0.dev0)"]
+grpc = ["grpcio (>=1.33.2,<2.0dev)", "grpcio (>=1.49.1,<2.0dev)", "grpcio-status (>=1.33.2,<2.0.dev0)", "grpcio-status (>=1.49.1,<2.0.dev0)"]
+grpcgcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
+grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
+
+[[package]]
+name = "google-api-python-client"
+version = "2.149.0"
+description = "Google API Client Library for Python"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "google_api_python_client-2.149.0-py2.py3-none-any.whl", hash = "sha256:1a5232e9cfed8c201799d9327e4d44dc7ea7daa3c6e1627fca41aa201539c0da"},
+    {file = "google_api_python_client-2.149.0.tar.gz", hash = "sha256:b9d68c6b14ec72580d66001bd33c5816b78e2134b93ccc5cf8f624516b561750"},
+]
+
+[package.dependencies]
+google-api-core = ">=1.31.5,<2.0.dev0 || >2.3.0,<3.0.0.dev0"
+google-auth = ">=1.32.0,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0.dev0"
+google-auth-httplib2 = ">=0.2.0,<1.0.0"
+httplib2 = ">=0.19.0,<1.dev0"
+uritemplate = ">=3.0.1,<5"
+
+[[package]]
+name = "google-auth"
+version = "2.35.0"
+description = "Google Authentication Library"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "google_auth-2.35.0-py2.py3-none-any.whl", hash = "sha256:25df55f327ef021de8be50bad0dfd4a916ad0de96da86cd05661c9297723ad3f"},
+    {file = "google_auth-2.35.0.tar.gz", hash = "sha256:f4c64ed4e01e8e8b646ef34c018f8bf3338df0c8e37d8b3bba40e7f574a3278a"},
+]
+
+[package.dependencies]
+cachetools = ">=2.0.0,<6.0"
+pyasn1-modules = ">=0.2.1"
+rsa = ">=3.1.4,<5"
+
+[package.extras]
+aiohttp = ["aiohttp (>=3.6.2,<4.0.0.dev0)", "requests (>=2.20.0,<3.0.0.dev0)"]
+enterprise-cert = ["cryptography", "pyopenssl"]
+pyopenssl = ["cryptography (>=38.0.3)", "pyopenssl (>=20.0.0)"]
+reauth = ["pyu2f (>=0.1.5)"]
+requests = ["requests (>=2.20.0,<3.0.0.dev0)"]
+
+[[package]]
+name = "google-auth-httplib2"
+version = "0.2.0"
+description = "Google Authentication Library: httplib2 transport"
+optional = false
+python-versions = "*"
+files = [
+    {file = "google-auth-httplib2-0.2.0.tar.gz", hash = "sha256:38aa7badf48f974f1eb9861794e9c0cb2a0511a4ec0679b1f886d108f5640e05"},
+    {file = "google_auth_httplib2-0.2.0-py2.py3-none-any.whl", hash = "sha256:b65a0a2123300dd71281a7bf6e64d65a0759287df52729bdd1ae2e47dc311a3d"},
+]
+
+[package.dependencies]
+google-auth = "*"
+httplib2 = ">=0.19.0"
+
+[[package]]
+name = "google-auth-oauthlib"
+version = "1.2.1"
+description = "Google Authentication Library"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "google_auth_oauthlib-1.2.1-py2.py3-none-any.whl", hash = "sha256:2d58a27262d55aa1b87678c3ba7142a080098cbc2024f903c62355deb235d91f"},
+    {file = "google_auth_oauthlib-1.2.1.tar.gz", hash = "sha256:afd0cad092a2eaa53cd8e8298557d6de1034c6cb4a740500b5357b648af97263"},
+]
+
+[package.dependencies]
+google-auth = ">=2.15.0"
+requests-oauthlib = ">=0.7.0"
+
+[package.extras]
+tool = ["click (>=6.0.0)"]
+
+[[package]]
+name = "googleapis-common-protos"
+version = "1.65.0"
+description = "Common protobufs used in Google APIs"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "googleapis_common_protos-1.65.0-py2.py3-none-any.whl", hash = "sha256:2972e6c496f435b92590fd54045060867f3fe9be2c82ab148fc8885035479a63"},
+    {file = "googleapis_common_protos-1.65.0.tar.gz", hash = "sha256:334a29d07cddc3aa01dee4988f9afd9b2916ee2ff49d6b757155dc0d197852c0"},
+]
+
+[package.dependencies]
+protobuf = ">=3.20.2,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<6.0.0.dev0"
+
+[package.extras]
+grpc = ["grpcio (>=1.44.0,<2.0.0.dev0)"]
+
+[[package]]
 name = "h11"
 version = "0.14.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -574,6 +735,20 @@ asyncio = ["anyio (>=4.0,<5.0)"]
 http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (==1.*)"]
 trio = ["trio (>=0.22.0,<1.0)"]
+
+[[package]]
+name = "httplib2"
+version = "0.22.0"
+description = "A comprehensive HTTP client library."
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+files = [
+    {file = "httplib2-0.22.0-py3-none-any.whl", hash = "sha256:14ae0a53c1ba8f3d37e9e27cf37eabb0fb9980f435ba405d546948b009dd64dc"},
+    {file = "httplib2-0.22.0.tar.gz", hash = "sha256:d7a10bc5ef5ab08322488bde8c726eeee5c8618723fdb399597ec58f3d82df81"},
+]
+
+[package.dependencies]
+pyparsing = {version = ">=2.4.2,<3.0.0 || >3.0.0,<3.0.1 || >3.0.1,<3.0.2 || >3.0.2,<3.0.3 || >3.0.3,<4", markers = "python_version > \"3.0\""}
 
 [[package]]
 name = "httptools"
@@ -958,6 +1133,22 @@ files = [
 ]
 
 [[package]]
+name = "oauthlib"
+version = "3.2.2"
+description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "oauthlib-3.2.2-py3-none-any.whl", hash = "sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca"},
+    {file = "oauthlib-3.2.2.tar.gz", hash = "sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918"},
+]
+
+[package.extras]
+rsa = ["cryptography (>=3.0.0)"]
+signals = ["blinker (>=1.4.0)"]
+signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
+
+[[package]]
 name = "packaging"
 version = "24.1"
 description = "Core utilities for Python packages"
@@ -1089,6 +1280,68 @@ files = [
     {file = "propcache-0.2.0-py3-none-any.whl", hash = "sha256:2ccc28197af5313706511fab3a8b66dcd6da067a1331372c82ea1cb74285e036"},
     {file = "propcache-0.2.0.tar.gz", hash = "sha256:df81779732feb9d01e5d513fad0122efb3d53bbc75f61b2a4f29a020bc985e70"},
 ]
+
+[[package]]
+name = "proto-plus"
+version = "1.24.0"
+description = "Beautiful, Pythonic protocol buffers."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "proto-plus-1.24.0.tar.gz", hash = "sha256:30b72a5ecafe4406b0d339db35b56c4059064e69227b8c3bda7462397f966445"},
+    {file = "proto_plus-1.24.0-py3-none-any.whl", hash = "sha256:402576830425e5f6ce4c2a6702400ac79897dab0b4343821aa5188b0fab81a12"},
+]
+
+[package.dependencies]
+protobuf = ">=3.19.0,<6.0.0dev"
+
+[package.extras]
+testing = ["google-api-core (>=1.31.5)"]
+
+[[package]]
+name = "protobuf"
+version = "5.28.2"
+description = ""
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "protobuf-5.28.2-cp310-abi3-win32.whl", hash = "sha256:eeea10f3dc0ac7e6b4933d32db20662902b4ab81bf28df12218aa389e9c2102d"},
+    {file = "protobuf-5.28.2-cp310-abi3-win_amd64.whl", hash = "sha256:2c69461a7fcc8e24be697624c09a839976d82ae75062b11a0972e41fd2cd9132"},
+    {file = "protobuf-5.28.2-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:a8b9403fc70764b08d2f593ce44f1d2920c5077bf7d311fefec999f8c40f78b7"},
+    {file = "protobuf-5.28.2-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:35cfcb15f213449af7ff6198d6eb5f739c37d7e4f1c09b5d0641babf2cc0c68f"},
+    {file = "protobuf-5.28.2-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:5e8a95246d581eef20471b5d5ba010d55f66740942b95ba9b872d918c459452f"},
+    {file = "protobuf-5.28.2-cp38-cp38-win32.whl", hash = "sha256:87317e9bcda04a32f2ee82089a204d3a2f0d3c8aeed16568c7daf4756e4f1fe0"},
+    {file = "protobuf-5.28.2-cp38-cp38-win_amd64.whl", hash = "sha256:c0ea0123dac3399a2eeb1a1443d82b7afc9ff40241433296769f7da42d142ec3"},
+    {file = "protobuf-5.28.2-cp39-cp39-win32.whl", hash = "sha256:ca53faf29896c526863366a52a8f4d88e69cd04ec9571ed6082fa117fac3ab36"},
+    {file = "protobuf-5.28.2-cp39-cp39-win_amd64.whl", hash = "sha256:8ddc60bf374785fb7cb12510b267f59067fa10087325b8e1855b898a0d81d276"},
+    {file = "protobuf-5.28.2-py3-none-any.whl", hash = "sha256:52235802093bd8a2811abbe8bf0ab9c5f54cca0a751fdd3f6ac2a21438bffece"},
+    {file = "protobuf-5.28.2.tar.gz", hash = "sha256:59379674ff119717404f7454647913787034f03fe7049cbef1d74a97bb4593f0"},
+]
+
+[[package]]
+name = "pyasn1"
+version = "0.6.1"
+description = "Pure-Python implementation of ASN.1 types and DER/BER/CER codecs (X.208)"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyasn1-0.6.1-py3-none-any.whl", hash = "sha256:0d632f46f2ba09143da3a8afe9e33fb6f92fa2320ab7e886e2d0f7672af84629"},
+    {file = "pyasn1-0.6.1.tar.gz", hash = "sha256:6f580d2bdd84365380830acf45550f2511469f673cb4a5ae3857a3170128b034"},
+]
+
+[[package]]
+name = "pyasn1-modules"
+version = "0.4.1"
+description = "A collection of ASN.1-based protocols modules"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyasn1_modules-0.4.1-py3-none-any.whl", hash = "sha256:49bfa96b45a292b711e986f222502c1c9a5e1f4e568fc30e2574a6c7d07838fd"},
+    {file = "pyasn1_modules-0.4.1.tar.gz", hash = "sha256:c28e2dbf9c06ad61c71a075c7e0f9fd0f1b0bb2d2ad4377f240d33ac2ab60a7c"},
+]
+
+[package.dependencies]
+pyasn1 = ">=0.4.6,<0.7.0"
 
 [[package]]
 name = "pydantic"
@@ -1246,6 +1499,20 @@ docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
 tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
+name = "pyparsing"
+version = "3.1.4"
+description = "pyparsing module - Classes and methods to define and execute parsing grammars"
+optional = false
+python-versions = ">=3.6.8"
+files = [
+    {file = "pyparsing-3.1.4-py3-none-any.whl", hash = "sha256:a6a7ee4235a3f944aa1fa2249307708f893fe5717dc603503c6c7969c070fb7c"},
+    {file = "pyparsing-3.1.4.tar.gz", hash = "sha256:f86ec8d1a83f11977c9a6ea7598e8c27fc5cddfa5b07ea2241edbbde1d7bc032"},
+]
+
+[package.extras]
+diagrams = ["jinja2", "railroad-diagrams"]
+
+[[package]]
 name = "pytest"
 version = "8.3.3"
 description = "pytest: simple powerful testing with Python"
@@ -1290,6 +1557,17 @@ python-versions = ">=3.8"
 files = [
     {file = "python_multipart-0.0.12-py3-none-any.whl", hash = "sha256:43dcf96cf65888a9cd3423544dd0d75ac10f7aa0c3c28a175bbcd00c9ce1aebf"},
     {file = "python_multipart-0.0.12.tar.gz", hash = "sha256:045e1f98d719c1ce085ed7f7e1ef9d8ccc8c02ba02b5566d5f7521410ced58cb"},
+]
+
+[[package]]
+name = "pytz"
+version = "2024.2"
+description = "World timezone definitions, modern and historical"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytz-2024.2-py2.py3-none-any.whl", hash = "sha256:31c7c1817eb7fae7ca4b8c7ee50c72f93aa2dd863de768e1ef4245d426aa0725"},
+    {file = "pytz-2024.2.tar.gz", hash = "sha256:2aa355083c50a0f93fa581709deac0c9ad65cca8a9e9beac660adcbd493c798a"},
 ]
 
 [[package]]
@@ -1376,6 +1654,24 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
+name = "requests-oauthlib"
+version = "2.0.0"
+description = "OAuthlib authentication support for Requests."
+optional = false
+python-versions = ">=3.4"
+files = [
+    {file = "requests-oauthlib-2.0.0.tar.gz", hash = "sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9"},
+    {file = "requests_oauthlib-2.0.0-py2.py3-none-any.whl", hash = "sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36"},
+]
+
+[package.dependencies]
+oauthlib = ">=3.0.0"
+requests = ">=2.0.0"
+
+[package.extras]
+rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
+
+[[package]]
 name = "rich"
 version = "13.9.2"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
@@ -1393,6 +1689,20 @@ typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.1
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
+
+[[package]]
+name = "rsa"
+version = "4.9"
+description = "Pure-Python RSA implementation"
+optional = false
+python-versions = ">=3.6,<4"
+files = [
+    {file = "rsa-4.9-py3-none-any.whl", hash = "sha256:90260d9058e514786967344d0ef75fa8727eed8a7d2e43ce9f4bcf1b536174f7"},
+    {file = "rsa-4.9.tar.gz", hash = "sha256:e38464a49c6c85d7f1351b0126661487a7e0a14a50f1675ec50eb34d4f20ef21"},
+]
+
+[package.dependencies]
+pyasn1 = ">=0.1.3"
 
 [[package]]
 name = "ruff"
@@ -1441,6 +1751,17 @@ python-versions = ">=3.7"
 files = [
     {file = "sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"},
     {file = "sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc"},
+]
+
+[[package]]
+name = "soupsieve"
+version = "2.6"
+description = "A modern CSS selector implementation for Beautiful Soup."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "soupsieve-2.6-py3-none-any.whl", hash = "sha256:e72c4ff06e4fb6e4b5a9f0f55fe6e81514581fca1515028625d0f299c602ccc9"},
+    {file = "soupsieve-2.6.tar.gz", hash = "sha256:e2e68417777af359ec65daac1057404a3c8a5455bb8abc36f1a9866ab1a51abb"},
 ]
 
 [[package]]
@@ -1514,6 +1835,17 @@ python-versions = ">=3.8"
 files = [
     {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
     {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
+]
+
+[[package]]
+name = "uritemplate"
+version = "4.1.1"
+description = "Implementation of RFC 6570 URI Templates"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "uritemplate-4.1.1-py2.py3-none-any.whl", hash = "sha256:830c08b8d99bdd312ea4ead05994a38e8936266f84b9a7878232db50b044e02e"},
+    {file = "uritemplate-4.1.1.tar.gz", hash = "sha256:4346edfc5c3b79f694bccd6d6099a322bbeb628dbf2cd86eea55a456ce5124f0"},
 ]
 
 [[package]]
@@ -1697,6 +2029,22 @@ files = [
 
 [package.dependencies]
 anyio = ">=3.0.0"
+
+[[package]]
+name = "websocket-client"
+version = "1.8.0"
+description = "WebSocket client for Python with low level API options"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "websocket_client-1.8.0-py3-none-any.whl", hash = "sha256:17b44cc997f5c498e809b22cdf2d9c7a9e71c02c8cc2b6c56e7c2d1239bfa526"},
+    {file = "websocket_client-1.8.0.tar.gz", hash = "sha256:3239df9f44da632f96012472805d40a23281a991027ce11d2f45a6f24ac4c3da"},
+]
+
+[package.extras]
+docs = ["Sphinx (>=6.0)", "myst-parser (>=2.0.0)", "sphinx-rtd-theme (>=1.1.0)"]
+optional = ["python-socks", "wsaccel"]
+test = ["websockets"]
 
 [[package]]
 name = "websockets"
@@ -1908,4 +2256,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c140b5792ad5f670129ad69730738a593705390f211595b4e2efed0f86ec1336"
+content-hash = "d15c81107003be574df7cd2adbb4331d90a679d6c87bdfc0611f04ae41173176"
