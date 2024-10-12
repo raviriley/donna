@@ -10,6 +10,11 @@ python = "^3.10"
 fastapi = {extras = ["standard"], version = "^0.115.2"}
 twilio = "^9.3.3"
 websocket-client = "^1.8.0"
+google = "^3.0.0"
+google-api-python-client = "^2.149.0"
+google-auth-httplib2 = "^0.2.0"
+google-auth-oauthlib = "^1.2.1"
+pytz = "^2024.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.9"
