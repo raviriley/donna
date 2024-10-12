@@ -8,9 +8,31 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = {extras = ["standard"], version = "^0.115.2"}
+twilio = "^9.3.3"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.9"
+mypy = "^1.11.2"
+
+[tool.mypy]
+python_version = "3.10"
+disallow_untyped_defs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+
+[tool.poetry.scripts]
+lint = "scripts.scripts:lint"
+l = "scripts.scripts:lint"
+format = "scripts.scripts:format_code"
+f = "scripts.scripts:format_code"
+format-lint = "scripts.scripts:format_and_lint"
+fl = "scripts.scripts:format_and_lint"
+test = "scripts.scripts:test"
+t = "scripts.scripts:test"
+format-lint-test = "scripts.scripts:format_lint_test"
+flt = "scripts.scripts:format_lint_test"
 
 [build-system]
 requires = ["poetry-core"]
