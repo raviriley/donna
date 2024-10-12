@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from twilio.rest import Client as TwilioClient
 from dotenv import load_dotenv
 import os
+from fastapi import WebSocket, WebSocketDisconnect
+
 
 app = FastAPI()
 
@@ -16,8 +18,8 @@ def hello() -> dict[str, str]:
 
 class CallRequest(BaseModel):
     phone_number: str = Field(..., description="The phone number to call")
-    call_context: str = Field(..., description="The context of the call")
-    agent_id: str = Field(..., description="The ID of the agent")
+    # call_context: str = Field(..., description="The context of the call")
+    # agent_id: str = Field(..., description="The ID of the agent")
 
 
 def get_twilio_client() -> TwilioClient:
@@ -32,7 +34,8 @@ async def trigger_outbound_call(
     request: CallRequest,
     twilio_client: TwilioClient = Depends(get_twilio_client),
 ) -> JSONResponse:
-    
+    print(request)
+
     phone_number = request.phone_number
 
     TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
@@ -61,3 +64,22 @@ async def trigger_outbound_call(
             "twilio_call_sid": call.sid,
         },
     )
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print(f"Received message: {data}")
+
+            # Echo the received message back to the client
+            await websocket.send_text(f"Echo: {data}")
+
+            # You can add your custom processing logic here
+    except WebSocketDisconnect:
+        print("WebSocket connection closed")
+    except Exception as e:
+        print(f"WebSocket error: {e}")
+        await websocket.close()
