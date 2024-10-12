@@ -50,6 +50,16 @@ def transfer_call(call_sid: str, new_phone_number: str) -> None:
     print(f"Call transferred to {new_phone_number} with Call SID: {call_sid}")
 
 
+def end_call(call_sid: str) -> None:
+    """Ends an ongoing Twilio call."""
+    twilio_client = get_twilio_client()
+    try:
+        twilio_client.calls(call_sid).update(status="completed")
+        print(f"Call with SID {call_sid} has been ended.")
+    except Exception as e:
+        print(f"Error ending call with SID {call_sid}: {str(e)}")
+
+
 def schedule_call(phone_number: str) -> None:
     print(f"Scheduling for {phone_number}")
     # send sms to phone number with link to calendar

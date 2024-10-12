@@ -9,8 +9,13 @@ from fastapi import WebSocket, WebSocketDisconnect
 import json
 import asyncio
 import websockets
-from .utils import get_twilio_client, transfer_call, schedule_call, get_caller_number
-
+from .utils import (
+    get_twilio_client,
+    transfer_call,
+    schedule_call,
+    get_caller_number,
+    end_call,
+)
 
 app = FastAPI()
 
@@ -146,6 +151,13 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                             except Exception as e:
                                 print(f"Error scheduling call: {e}")
 
+                        elif function_name == "hang_up":
+                            try:
+                                await asyncio.sleep(5)
+                                end_call(call_sid)
+                            except Exception as e:
+                                print(f"Error ending call: {e}")
+
                         else:
                             if function_name:
                                 print(f"Unknown function call: {function_name}")
@@ -197,6 +209,11 @@ async def send_session_update(openai_ws) -> None:
                     "type": "function",
                     "name": "schedule_call",
                     "description": "Schedules a call by sending a scheduling link to the provided phone number.",
+                },
+                {
+                    "type": "function",
+                    "name": "hang_up",
+                    "description": "Ends the current call.",
                 },
             ],
             "tool_choice": "auto",
