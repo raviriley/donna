@@ -22,6 +22,11 @@ class TextStyle:
     END = "\033[0m"
 
 
+def dev_server() -> None:
+    """Runs the FastAPI dev server."""
+    subprocess.run(f"fastapi dev {project_folder}/main.py", shell=True, text=True)
+
+
 def lint() -> None:
     """Linting script."""
 

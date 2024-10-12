@@ -34,6 +34,8 @@ test = "scripts.scripts:test"
 t = "scripts.scripts:test"
 format-lint-test = "scripts.scripts:format_lint_test"
 flt = "scripts.scripts:format_lint_test"
+dev = "scripts.scripts:dev_server"
+d = "scripts.scripts:dev_server"
 
 [build-system]
 requires = ["poetry-core"]
