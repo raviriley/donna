@@ -6,14 +6,10 @@ from twilio.rest import Client as TwilioClient
 from dotenv import load_dotenv
 import os
 from fastapi import WebSocket, WebSocketDisconnect
+import json
 
 
 app = FastAPI()
-
-
-@app.get("/hello")
-def hello() -> dict[str, str]:
-    return {"Hello": "World"}
 
 
 class CallRequest(BaseModel):
@@ -72,7 +68,15 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            print(f"Received message: {data}")
+            data_json = json.loads(data)
+            if "media" in data_json and "payload" in data_json["media"]:
+                payload = data_json["media"]["payload"]
+                # send to realtime API
+                print(payload)
+            else:
+                print(f"Received message: {data}")
+
+            data
 
             # Echo the received message back to the client
             await websocket.send_text(f"Echo: {data}")
