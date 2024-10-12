@@ -5,10 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "format": "prettier --write . --cache --cache-strategy content",
-    "typecheck": "tsc --noEmit --pretty --project tsconfig.json && echo '✔ TypeScript compilation passed'"
+    "start": "next start"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",
