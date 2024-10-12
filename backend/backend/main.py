@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from fastapi import FastAPI
@@ -24,11 +24,13 @@ app = FastAPI()
 class CallRequest(BaseModel):
     phone_number: str = Field(..., description="The phone number to call")
 
+
 @app.post("/calls/outbound")
 async def trigger_outbound_call(
-    phone_number: str,
+    request: CallRequest,
     twilio_client: TwilioClient = Depends(get_twilio_client),
 ) -> JSONResponse:
+    phone_number = request.phone_number
 
     TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
     STREAM_URL: str = os.environ.get("STREAM_URL")
@@ -55,6 +57,33 @@ async def trigger_outbound_call(
             "message": f"Call initiated! Call SID: {call.sid}",
             "twilio_call_sid": call.sid,
         },
+    )
+
+@app.post("/calls/inbound")
+async def handle_inbound_call(
+    request: Request,
+    twilio_client: TwilioClient = Depends(get_twilio_client),
+) -> JSONResponse:
+    """Handles an inbound call from Twilio."""
+    STREAM_URL: str = os.environ.get("STREAM_URL")
+    form_data = await request.form()
+    call_sid = form_data.get("CallSid")
+    from_number = form_data.get("From")
+    to_number = form_data.get("To")
+
+    print(f"Incoming call from {from_number} to {to_number} with Call SID: {call_sid}")
+
+    # Generate TwiML response to handle the call
+    twiml_response = f"""<Response>
+                <Connect>
+                    <Stream url="{STREAM_URL}">
+                    </Stream>
+                </Connect>
+            </Response>"""
+
+    return JSONResponse(
+        status_code=200,
+        content={"twiml": twiml_response},
     )
 
 
