@@ -32,42 +32,32 @@ async def trigger_outbound_call(
     request: CallRequest,
     twilio_client: TwilioClient = Depends(get_twilio_client),
 ) -> JSONResponse:
+    
     phone_number = request.phone_number
-    call_context = request.call_context
-    agent_id = request.agent_id
 
     TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
     STREAM_URL: str = os.environ.get("STREAM_URL")
 
-    print(
-        f"phone_number: {phone_number}, call_context: {call_context}, agent_id: {agent_id}"
-    )
-
-    if phone_number and agent_id and call_context:
-        twiml_response = f"""<Response>
+    twiml_response = f"""<Response>
                 <Connect>
                     <Stream url="{STREAM_URL}">
-                        <Parameter name="agent_id" value="{agent_id}"/>
-                        <Parameter name="call_context" value="{call_context}"/>
                     </Stream>
                 </Connect>
                 <Pause length='1'/>
             </Response>"""
 
-        call = twilio_client.calls.create(
-            twiml=twiml_response,
-            to=phone_number,
-            from_=TWILIO_PHONE_NUMBER,
-        )
+    call = twilio_client.calls.create(
+        twiml=twiml_response,
+        to=phone_number,
+        from_=TWILIO_PHONE_NUMBER,
+    )
 
-        print(f"Call initiated! Call SID: {call.sid}")
+    print(f"Call initiated! Call SID: {call.sid}")
 
-        return JSONResponse(
-            status_code=200,
-            content={
-                "message": f"Call initiated! Call SID: {call.sid}",
-                "twilio_call_sid": call.sid,
-            },
-        )
-    else:
-        return JSONResponse(status_code=400, content={"message": "Invalid request"})
+    return JSONResponse(
+        status_code=200,
+        content={
+            "message": f"Call initiated! Call SID: {call.sid}",
+            "twilio_call_sid": call.sid,
+        },
+    )
