@@ -9,6 +9,7 @@ from fastapi import WebSocket, WebSocketDisconnect
 import json
 import asyncio
 import websockets
+from .utils import get_twilio_client
 
 
 app = FastAPI()
@@ -17,12 +18,6 @@ app = FastAPI()
 class CallRequest(BaseModel):
     phone_number: str = Field(..., description="The phone number to call")
 
-
-def get_twilio_client() -> TwilioClient:
-    load_dotenv()
-    account_sid: str = os.environ.get("TWILIO_ACCOUNT_SID")
-    auth_token: str = os.environ.get("TWILIO_AUTH_TOKEN")
-    return TwilioClient(account_sid, auth_token)
 
 @app.post("/calls/outbound")
 async def trigger_outbound_call(
@@ -61,27 +56,8 @@ async def trigger_outbound_call(
     )
 
 
-def transfer_call(call_sid: str, new_phone_number: str) -> None:
-    """Transfers an existing call to a different phone number mid-stream."""
-    twiml_response = f"""<Response>
-                <Dial>{new_phone_number}</Dial>
-            </Response>"""
-    twilio_client = get_twilio_client()
-    twilio_client.calls(call_sid).update(twiml=twiml_response)
-    print(f"Call transferred to {new_phone_number} with Call SID: {call_sid}")
-
-
-def schedule_call(phone_number: str) -> None:
-    print(f"Scheduling for {phone_number}")
-    # send sms to phone number with link to calendar
-    message = f"Please schedule a call with Harvey at https://calendly.com/ravi0/bab"
-    TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
-    twilio_client = get_twilio_client()
-    twilio_client.messages.create(to=phone_number, from_=TWILIO_PHONE_NUMBER, body=message)
-
-
 @app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(websocket: WebSocket) -> None:
     await websocket.accept()
     call_sid = None  # Initialize call_sid to store the call ID
 
@@ -100,7 +76,7 @@ async def websocket_endpoint(websocket: WebSocket):
         # Send session update with system prompt
         await send_session_update(openai_ws)
 
-        async def receive_from_twilio():
+        async def receive_from_twilio() -> None:
             nonlocal call_sid
             try:
                 while True:
@@ -123,7 +99,7 @@ async def websocket_endpoint(websocket: WebSocket):
             except WebSocketDisconnect:
                 print("WebSocket connection closed")
 
-        async def receive_from_openai():
+        async def receive_from_openai() -> None:
             try:
                 async for openai_message in openai_ws:
                     response = json.loads(openai_message)
@@ -143,7 +119,7 @@ async def websocket_endpoint(websocket: WebSocket):
         await asyncio.gather(receive_from_twilio(), receive_from_openai())
 
 
-async def send_session_update(openai_ws):
+async def send_session_update(openai_ws) -> None:
     """Send session update to OpenAI WebSocket."""
     system_prompt = (
         "You are a personal assistant named Donna, with the personality and mannerisms of Donna from Suits. Donna's personality traits include:"
