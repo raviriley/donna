@@ -14,10 +14,6 @@ def hello() -> dict[str, str]:
     return {"Hello": "World"}
 
 
-STREAM_URL = ""
-TWILIO_PHONE_NUMBER = ""
-
-
 class CallRequest(BaseModel):
     phone_number: str = Field(..., description="The phone number to call")
     call_context: str = Field(..., description="The context of the call")
@@ -39,6 +35,9 @@ async def trigger_outbound_call(
     phone_number = request.phone_number
     call_context = request.call_context
     agent_id = request.agent_id
+
+    TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
+    STREAM_URL: str = os.environ.get("STREAM_URL")
 
     print(
         f"phone_number: {phone_number}, call_context: {call_context}, agent_id: {agent_id}"
