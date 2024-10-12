@@ -5,6 +5,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import pytz
 
 
 # If modifying these scopes, delete the file token.json.
@@ -28,11 +29,13 @@ def get_credentials():
     return creds
 
 
-def get_events_for_today(calendar_id="primary"):
+def get_events_for_today(calendar_id="primary") -> str:
     """Get events from Google Calendar for today."""
     creds = get_credentials()
     try:
         service = build("calendar", "v3", credentials=creds, cache_discovery=False)
+        # Get the local timezone
+        local_tz = pytz.timezone("America/New_York")  # Replace with your timezone
         today = datetime.date.today()
         start_datetime = (
             datetime.datetime.combine(today, datetime.datetime.min.time()).isoformat()
@@ -54,7 +57,26 @@ def get_events_for_today(calendar_id="primary"):
             .execute()
         )
         events = events_result.get("items", [])
-        return events
+
+        current_time = datetime.datetime.now(local_tz)
+        events_string = f"The current date and time is {current_time.strftime('%Y-%m-%d %H:%M')} {local_tz.zone}\n"
+
+        if events:
+            for event in events:
+                start = datetime.datetime.fromisoformat(
+                    event["start"].get("dateTime", event["start"].get("date"))
+                )
+                end = datetime.datetime.fromisoformat(
+                    event["end"].get("dateTime", event["end"].get("date"))
+                )
+                start_local = start.astimezone(local_tz)
+                end_local = end.astimezone(local_tz)
+                events_string += f"{event['summary']} from {start_local.strftime('%Y-%m-%d %H:%M')} to {end_local.strftime('%Y-%m-%d %H:%M')}\n"
+        else:
+            events_string += "No events for today.\n"
+
+        print(events_string)
+        return events_string
     except HttpError as error:
         print(f"An error occurred: {error}")
-        return []
+        return ""
