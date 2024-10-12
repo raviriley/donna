@@ -24,13 +24,11 @@ app = FastAPI()
 class CallRequest(BaseModel):
     phone_number: str = Field(..., description="The phone number to call")
 
-
 @app.post("/calls/outbound")
 async def trigger_outbound_call(
-    request: CallRequest,
+    phone_number: str,
     twilio_client: TwilioClient = Depends(get_twilio_client),
 ) -> JSONResponse:
-    phone_number = request.phone_number
 
     TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
     STREAM_URL: str = os.environ.get("STREAM_URL")
