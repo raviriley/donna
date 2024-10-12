@@ -1,12 +1,38 @@
-from .main import get_twilio_client
+from twilio.rest import Client as TwilioClient
+from dotenv import load_dotenv
+import os
+
+
+def get_twilio_client() -> TwilioClient:
+    load_dotenv()
+    account_sid: str = os.environ.get("TWILIO_ACCOUNT_SID")
+    auth_token: str = os.environ.get("TWILIO_AUTH_TOKEN")
+    return TwilioClient(account_sid, auth_token)
+
 
 def send_text_message(to_number: str, message_body: str, from_number: str) -> str:
     """Sends a text message using Twilio."""
     twilio_client = get_twilio_client()
     message = twilio_client.messages.create(
-        body=message_body,
-        from_=from_number,
-        to=to_number
+        body=message_body, from_=from_number, to=to_number
     )
     print(f"Message sent! Message SID: {message.sid}")
     return message.sid
+
+
+def transfer_call(call_sid: str, new_phone_number: str) -> None:
+    """Transfers an existing call to a different phone number mid-stream."""
+    twiml_response = f"""<Response>
+                <Dial>{new_phone_number}</Dial>
+            </Response>"""
+    twilio_client = get_twilio_client()
+    twilio_client.calls(call_sid).update(twiml=twiml_response)
+    print(f"Call transferred to {new_phone_number} with Call SID: {call_sid}")
+
+
+def schedule_call(phone_number: str) -> None:
+    print(f"Scheduling for {phone_number}")
+    # send sms to phone number with link to calendar
+    message = "Please schedule a call with Harvey at https://calendly.com/ravi0/bab"
+    TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
+    send_text_message(phone_number, message, TWILIO_PHONE_NUMBER)
