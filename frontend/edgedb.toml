@@ -1,3 +1,2 @@
 [edgedb]
-server-version = "3.0"
-schema = "../packages/edgedb/dbschema/default.esdl"
+server-version = "5.6"

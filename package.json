@@ -1,5 +1,5 @@
 {
-	"name": "your-project-name",
+	"name": "donna",
 	"private": true,
 	"scripts": {
 		"dev": "pnpm --filter frontend dev",
