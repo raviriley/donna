@@ -75,7 +75,7 @@ def transfer_call(call_sid: str, new_phone_number: str) -> None:
 def schedule_call(phone_number: str) -> None:
     print(f"Scheduling for {phone_number}")
     # send sms to phone number with link to calendar
-    message = f"Please schedule a call with Harvey at https://calendly.com/ravi0/babylon-demo"
+    message = f"Please schedule a call with Harvey at https://calendly.com/ravi0/bab"
     TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
     twilio_client = get_twilio_client()
     twilio_client.messages.create(to=phone_number, from_=TWILIO_PHONE_NUMBER, body=message)
