@@ -24,7 +24,6 @@ def get_twilio_client() -> TwilioClient:
     auth_token: str = os.environ.get("TWILIO_AUTH_TOKEN")
     return TwilioClient(account_sid, auth_token)
 
-
 @app.post("/calls/outbound")
 async def trigger_outbound_call(
     request: CallRequest,

@@ -32,6 +32,7 @@ def get_caller_number(call_sid):
     else:
         return ''
 
+
 class AgentConnection:
     def __init__(self, ws):
         self.ws = ws
