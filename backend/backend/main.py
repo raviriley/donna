@@ -2,6 +2,7 @@ from fastapi import Depends, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from twilio.rest import Client as TwilioClient
 from dotenv import load_dotenv
 import os
@@ -21,13 +22,25 @@ from enum import Enum
 
 app = FastAPI()
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
+
 class CallStatus(Enum):
     NO_CURRENT_CALL = "no current call"
     IN_PROGRESS = "in progress"
     TRANSFERRED = "transferred"
     SCHEDULED = "scheduled"
 
+
 call_status = CallStatus.NO_CURRENT_CALL
+
 
 class CallRequest(BaseModel):
     phone_number: str = Field(..., description="The phone number to call")
@@ -68,13 +81,17 @@ async def trigger_outbound_call(
         },
     )
 
+
 @app.get("/calls/status")
 async def get_call_status() -> JSONResponse:
     """Returns the current status of the call."""
+    print(f"call_status: {call_status.value}")
     return JSONResponse(
         status_code=200,
         content={"call_status": call_status.value},
+        headers={"Content-Type": "application/json"},
     )
+
 
 @app.post("/calls/inbound")
 async def handle_inbound_call(
@@ -159,6 +176,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
             nonlocal stream_sid
             nonlocal call_sid
             nonlocal link_sent
+            global call_status
             previous_response_type = None
             function_name = None
             try:
