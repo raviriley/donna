@@ -63,6 +63,6 @@ def end_call(call_sid: str) -> None:
 def schedule_call(phone_number: str) -> None:
     print(f"Scheduling for {phone_number}")
     # send sms to phone number with link to calendar
-    message = "Please schedule a call with Harvey at https://calendly.com/ravi0/bab"
+    message = f"Please schedule a call with Harvey at {os.environ.get('CALENDLY_URL')}"
     TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
     send_text_message(phone_number, message, TWILIO_PHONE_NUMBER)
