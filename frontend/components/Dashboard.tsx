@@ -68,6 +68,7 @@ export default function Dashboard() {
 					AI Call Screener Configuration
 				</h1>
 
+				{/* <Button onClick={testFunction}>Test</Button> */}
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<AddRuleCard onAddRule={addRule} />
 					<PhoneNumberCard />

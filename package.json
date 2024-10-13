@@ -1,0 +1,12 @@
+{
+	"name": "donna",
+	"private": true,
+	"scripts": {
+		"dev": "pnpm --filter frontend dev",
+		"build": "pnpm --filter frontend build",
+		"start": "pnpm --filter frontend start"
+	},
+	"devDependencies": {
+		"pnpm": "^6.0.0"
+	}
+}
