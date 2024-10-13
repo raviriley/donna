@@ -61,7 +61,7 @@ export default function StatusPage() {
   return (
     <div className="flex h-screen w-full items-center justify-center flex flex-col">
       <h1
-        className={`text-2xl font-bold pb-8 ${
+        className={`text-3xl font-bold pb-8 ${
           status === "no current call"
             ? "text-gray-500"
             : status === "in progress"
