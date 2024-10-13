@@ -198,6 +198,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                             try:
                                 await asyncio.sleep(5)
                                 if not link_sent:
+                                    call_status = CallStatus.SCHEDULED
                                     schedule_call(phone_number)
                                     print(f"Scheduling link sent to {phone_number}")
                                     link_sent = True
