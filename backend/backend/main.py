@@ -17,9 +17,17 @@ from .utils import (
     end_call,
 )
 from .google_functions import get_events_for_today
+from enum import Enum
 
 app = FastAPI()
 
+class CallStatus(Enum):
+    NO_CURRENT_CALL = "no current call"
+    IN_PROGRESS = "in progress"
+    TRANSFERRED = "transferred"
+    SCHEDULED = "scheduled"
+
+call_status = CallStatus.NO_CURRENT_CALL
 
 class CallRequest(BaseModel):
     phone_number: str = Field(..., description="The phone number to call")
@@ -30,6 +38,7 @@ async def trigger_outbound_call(
     request: CallRequest,
     twilio_client: TwilioClient = Depends(get_twilio_client),
 ) -> JSONResponse:
+    global call_status
     phone_number = request.phone_number
 
     TWILIO_PHONE_NUMBER: str = os.environ.get("TWILIO_PHONE_NUMBER")
@@ -48,7 +57,7 @@ async def trigger_outbound_call(
         to=phone_number,
         from_=TWILIO_PHONE_NUMBER,
     )
-
+    call_status = CallStatus.IN_PROGRESS
     print(f"Call initiated! Call SID: {call.sid}")
 
     return JSONResponse(
@@ -59,12 +68,21 @@ async def trigger_outbound_call(
         },
     )
 
+@app.get("/calls/status")
+async def get_call_status() -> JSONResponse:
+    """Returns the current status of the call."""
+    return JSONResponse(
+        status_code=200,
+        content={"call_status": call_status.value},
+    )
+
 @app.post("/calls/inbound")
 async def handle_inbound_call(
     request: Request,
     twilio_client: TwilioClient = Depends(get_twilio_client),
 ) -> Response:
     """Handles an inbound call from Twilio."""
+    global call_status
     STREAM_URL: str = os.environ.get("STREAM_URL")
     form_data = await request.form()
     call_sid = form_data.get("CallSid")
@@ -83,6 +101,8 @@ async def handle_inbound_call(
 
     content_type = "application/xml"
 
+    call_status = CallStatus.IN_PROGRESS
+
     # Return a Response object with the TwiML response and content type
     return Response(content=twiml_response, media_type=content_type)
 
@@ -92,6 +112,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
     await websocket.accept()
     call_sid = None  # Initialize call_sid to store the call ID
     stream_sid = None
+    global call_status
     # Load environment variables
     load_dotenv()
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
@@ -163,6 +184,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                         if function_name == "transfer_call":
                             try:
                                 await asyncio.sleep(5)
+                                call_status = CallStatus.TRANSFERRED
                                 print(
                                     f"Transferring call sid {call_sid} to {HARVEY_PHONE_NUMBER}"
                                 )
@@ -185,6 +207,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                         elif function_name == "hang_up":
                             try:
                                 await asyncio.sleep(5)
+                                call_status = CallStatus.NO_CURRENT_CALL
                                 end_call(call_sid)
                             except Exception as e:
                                 print(f"Error ending call: {e}")
@@ -201,6 +224,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
 
             except Exception as e:
                 print(f"Error in receive_from_openai: {e}")
+                call_status = CallStatus.NO_CURRENT_CALL
 
         await asyncio.gather(receive_from_twilio(), receive_from_openai())
 
