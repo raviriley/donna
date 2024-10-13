@@ -2,6 +2,7 @@
 
 Donna screens your calls, rejecting the spam and preserving your sanity by sending callers your scheduling / Calendly link when you're busy. Using the latest [Realtime API](https://openai.com/index/introducing-the-realtime-api/) from OpenAI in conjunction with function calling to Google Calendar and Twilio, Donna knows when you're busy in real time and can handle multiple callers at once in 85 different languages!
 
+
 **Monorepo Stack**:
 - FastAPI backend written in Python
   - processes phone calls and audio streaming between both Twilio and OpenAI usings websockets
@@ -43,6 +44,7 @@ We used [Poetry](https://python-poetry.org/) to handle Python dependencies on th
    - `dev` to start the dev server
 8. call Donna!
 
+-----
 
-
+https://github.com/user-attachments/assets/d266a922-6c3e-43e7-9629-1e36ee6e3f65
  
