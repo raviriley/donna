@@ -12,6 +12,8 @@ Donna screens your calls, rejecting the spam and preserving your sanity by sendi
 - Next.js frontend written in Typescript
   - `/status` page that visualizes calls in real-time
   - integration with EdgeDB to handle user preferences and (in the future) semantic searching over previous conversations
+ 
+![Screen Recording 2024-10-13 at 1 55 01 AM](https://github.com/user-attachments/assets/6cceb50d-c4a2-4fc7-a8ae-b2d903cdfab9)
 
 ## Running the apps
 `.env` file:
