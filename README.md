@@ -1,5 +1,7 @@
 # Donna - your badass AI Secretary
 
+> note: this code is licensed under NPOSL-3.0 (non-profit, no commercial use)
+
 Donna screens your calls, rejecting the spam and preserving your sanity by sending callers your scheduling / Calendly link when you're busy. Using the latest [Realtime API](https://openai.com/index/introducing-the-realtime-api/) from OpenAI in conjunction with function calling to Google Calendar and Twilio, Donna knows when you're busy in real time and can handle multiple callers at once in 85 different languages!
 
 https://github.com/user-attachments/assets/d266a922-6c3e-43e7-9629-1e36ee6e3f65
